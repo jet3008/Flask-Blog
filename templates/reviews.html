@@ -1,0 +1,62 @@
+{% extends 'base/base.html'%} {% block title %} {{ title }} {% endblock %} {% block content%}
+
+<body>
+    <div class="container">
+        <table class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Fecha de creacion</th>
+                    <th scope="col">Comment</th>
+                    <th scope="col">Picture name</th>
+                    <th scope="col">Picture</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if comments: %} {% for comment in comments.items %}
+                <tr>
+                    <td>{{comment.username}}</td>
+                    <td>{{ date_format(comment.create_date) }}</td>
+                    <td>{{comment.text}}</td>
+                    <td>{{comment.imageURL}}</td>
+                    <td>
+                        <a href="{{ url_for('update',id=comment.id) }}">
+                            <img src="{{ url_for('static', filename='img/uploaded_img/')+comment.imageURL }}" class="rounded float-left img-thumbnail img-fluid" alt="none" style="max-width: 20em;">
+                        </a>
+                    </td>
+                </tr>
+                <p></p>
+                {% endfor %} {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Links-->
+        <div class="text-right">
+            <a href="{{ url_for('reviews', page=comments.prev_num) }}" class="btn btn-outline-dark 
+            {% if comments.page == 1 %}disabled{% endif %}">
+                &laquo;
+            </a>
+            <!-- Loop through the number of pages to display a link for each-->
+            {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
+            <!-- Check for the active page and set the link to "Active"-->
+            {% if comments.page == page_num %}
+            <a href="{{ url_for('reviews', page=page_num) }}" class="btn btn-dark">
+                        {{ page_num }}
+                    </a> {% else %}
+            <a href="{{ url_for('reviews', page=page_num) }}" class="btn btn-outline-dark">
+                        {{ page_num }}
+                    </a> {% endif %} {% else %} ... {% endif %} {% endfor %}
+            <a href="{{ url_for('reviews', page=comments.next_num) }}" class="btn btn-outline-dark 
+            {% if comments.page == comments.pages %}disabled{% endif %}">
+                &raquo;
+            </a>
+        </div>
+        <p class="text-right mt-3">
+            Showing page {{ comments.page }} of {{ comments.pages }}
+        </p>
+
+    </div>
+</body>
+
+{% endblock %}

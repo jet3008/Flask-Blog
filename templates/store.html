@@ -1,0 +1,30 @@
+{% extends 'base/base.html'%} {% block title %} {{ title }} {% endblock %} {% block content%}
+<div class="container-fluid">
+    <div class="row">
+        {% if product: %} {% for product in product.items %}
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm">
+                <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg> -->
+
+                <img src="{{ url_for('static', filename='img/img_product/')+product.imageURL }}" class="rounded float-left img-thumbnail img-fluid" alt="none" width="100%" height="225">
+
+                <div class="card-body">
+                    <p class="card-text ">
+                        <div class="row">{{product.product_name}}</div>
+                        <div class="row moneyFormat" {% if product.on_offer==True %} style="text-decoration:line-through;" {% endif %}>${{product.regular_price}}</div>
+                        {% if product.on_offer==True %}
+                        <div class="row moneyFormat">Offer price: ${{product.offer_price}}</div>
+                        {% endif %}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group producto" data-badges="{{product.id}}">
+                            <div class="btn btn-sm btn-outline-secondary "><i class="fa-solid fa-cart-shopping"></i>Add to cart</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+</div>
+{% endblock %}
